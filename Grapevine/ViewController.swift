@@ -43,12 +43,29 @@ class ViewController: UIViewController {
   @IBOutlet private weak var summaryLabel: UILabel!
   @IBOutlet private weak var pageControl: UIPageControl!
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
+  private var allConstraints: [NSLayoutConstraint] = []
+  
+  override func viewSafeAreaInsetsDidChange() {
+    super.viewSafeAreaInsetsDidChange()
+    
+    if !allConstraints.isEmpty {
+      NSLayoutConstraint.deactivate(allConstraints)
+      allConstraints.removeAll()
+    }
+    
+    let newInsets = view.safeAreaInsets
+    let leftMargin = newInsets.left > 0 ? newInsets.left : Metrics.padding
+    let rightMargin = newInsets.right > 0 ? newInsets.right : Metrics.padding
+    let topMargin = newInsets.top > 0 ? newInsets.top : Metrics.padding
+    let bottomMargin = newInsets.bottom > 0 ? newInsets.bottom : Metrics.padding
     
     let metrics = [
       "horizontalPadding": Metrics.padding,
-      "iconImageViewWidth": Metrics.iconImageViewWidth]
+      "iconImageViewWidth": Metrics.iconImageViewWidth,
+      "topMargin": topMargin,
+      "bottomMargin": bottomMargin,
+      "leftMargin": leftMargin,
+      "rightMargin": rightMargin]
     
     let views: [String: Any] = [
       "iconImageView": iconImageView,
@@ -59,16 +76,14 @@ class ViewController: UIViewController {
       "summaryLabel": summaryLabel,
       "pageControl": pageControl]
     
-    var allConstraints: [NSLayoutConstraint] = []
-    
     let iconVerticalConstraints = NSLayoutConstraint.constraints(
-      withVisualFormat: "V:|-20-[iconImageView(30)]",
-      metrics: nil,
+      withVisualFormat: "V:|-topMargin-[iconImageView(30)]",
+      metrics: metrics,
       views: views)
     allConstraints += iconVerticalConstraints
     
     let topRowHorizontalFormat = """
-  H:|-horizontalPadding-[iconImageView(iconImageViewWidth)]-[appNameLabel]-[skipButton]-horizontalPadding-|
+  H:|-leftMargin-[iconImageView(iconImageViewWidth)]-[appNameLabel]-[skipButton]-rightMargin-|
   """
     let topRowHorizontalConstraints = NSLayoutConstraint.constraints(
       withVisualFormat: topRowHorizontalFormat,
@@ -82,12 +97,6 @@ class ViewController: UIViewController {
       metrics: metrics,
       views: views)
     allConstraints += summaryHorizontalConstraints
-    
-    let welcomeHorizontalConstraints = NSLayoutConstraint.constraints(
-      withVisualFormat: "H:|-15-[welcomeLabel]-15-|",
-      metrics: nil,
-      views: views)
-    allConstraints += welcomeHorizontalConstraints
     
     let iconToImageVerticalConstraints = NSLayoutConstraint.constraints(
       withVisualFormat: "V:[iconImageView]-10-[appImageView]",
@@ -110,13 +119,13 @@ class ViewController: UIViewController {
     allConstraints += summaryLabelVerticalConstraints
     
     let summaryToPageVerticalConstraints = NSLayoutConstraint.constraints(
-      withVisualFormat: "V:[summaryLabel]-15-[pageControl(9)]-15-|",
+      withVisualFormat: "V:[summaryLabel]-15-[pageControl(9)]-bottomMargin-|",
       options: [.alignAllCenterX],
-      metrics: nil,
+      metrics: metrics,
       views: views)
     allConstraints += summaryToPageVerticalConstraints
     
-    NSLayoutConstraint.activate(allConstraints)
+    NSLayoutConstraint.activate(allConstraints)    
   }
   
 }
