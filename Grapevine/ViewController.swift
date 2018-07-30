@@ -30,6 +30,11 @@ import UIKit
 
 class ViewController: UIViewController {
   
+  private enum Metrics {
+    static let padding: CGFloat = 15.0
+    static let iconImageViewWidth: CGFloat = 30.0
+  }
+  
   @IBOutlet private weak var iconImageView: UIImageView!
   @IBOutlet private weak var appNameLabel: UILabel!
   @IBOutlet private weak var skipButton: UIButton!
@@ -40,6 +45,10 @@ class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    let metrics = [
+      "horizontalPadding": Metrics.padding,
+      "iconImageViewWidth": Metrics.iconImageViewWidth]
     
     let views: [String: Any] = [
       "iconImageView": iconImageView,
@@ -58,16 +67,19 @@ class ViewController: UIViewController {
       views: views)
     allConstraints += iconVerticalConstraints
     
+    let topRowHorizontalFormat = """
+  H:|-horizontalPadding-[iconImageView(iconImageViewWidth)]-[appNameLabel]-[skipButton]-horizontalPadding-|
+  """
     let topRowHorizontalConstraints = NSLayoutConstraint.constraints(
-      withVisualFormat: "H:|-15-[iconImageView(30)]-[appNameLabel]-[skipButton]-15-|",
+      withVisualFormat: topRowHorizontalFormat,
       options: [.alignAllCenterY],
-      metrics: nil,
+      metrics: metrics,
       views: views)
     allConstraints += topRowHorizontalConstraints
     
     let summaryHorizontalConstraints = NSLayoutConstraint.constraints(
-      withVisualFormat: "H:|-15-[summaryLabel]-15-|",
-      metrics: nil,
+      withVisualFormat: "H:|-horizontalPadding-[summaryLabel]-horizontalPadding-|",
+      metrics: metrics,
       views: views)
     allConstraints += summaryHorizontalConstraints
     
