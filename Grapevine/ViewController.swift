@@ -58,20 +58,9 @@ class ViewController: UIViewController {
       views: views)
     allConstraints += iconVerticalConstraints
     
-    let nameLabelVerticalConstraints = NSLayoutConstraint.constraints(
-      withVisualFormat: "V:|-23-[appNameLabel]",
-      metrics: nil,
-      views: views)
-    allConstraints += nameLabelVerticalConstraints
-    
-    let skipButtonVerticalConstraints = NSLayoutConstraint.constraints(
-      withVisualFormat: "V:|-20-[skipButton]",
-      metrics: nil,
-      views: views)
-    allConstraints += skipButtonVerticalConstraints
-    
     let topRowHorizontalConstraints = NSLayoutConstraint.constraints(
       withVisualFormat: "H:|-15-[iconImageView(30)]-[appNameLabel]-[skipButton]-15-|",
+      options: [.alignAllCenterY],
       metrics: nil,
       views: views)
     allConstraints += topRowHorizontalConstraints
@@ -96,18 +85,21 @@ class ViewController: UIViewController {
     
     let imageToWelcomeVerticalConstraints = NSLayoutConstraint.constraints(
       withVisualFormat: "V:[appImageView]-10-[welcomeLabel]",
+      options: [.alignAllCenterX],
       metrics: nil,
       views: views)
     allConstraints += imageToWelcomeVerticalConstraints
     
     let summaryLabelVerticalConstraints = NSLayoutConstraint.constraints(
       withVisualFormat: "V:[welcomeLabel]-4-[summaryLabel]",
+      options: [.alignAllLeading, .alignAllTrailing],
       metrics: nil,
       views: views)
     allConstraints += summaryLabelVerticalConstraints
     
     let summaryToPageVerticalConstraints = NSLayoutConstraint.constraints(
       withVisualFormat: "V:[summaryLabel]-15-[pageControl(9)]-15-|",
+      options: [.alignAllCenterX],
       metrics: nil,
       views: views)
     allConstraints += summaryToPageVerticalConstraints
